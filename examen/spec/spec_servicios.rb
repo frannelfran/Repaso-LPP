@@ -1,12 +1,12 @@
 require_relative '../lib/servicios.rb'
 
-describe Servicios do
+describe Servicio do
   before :all do
-    @servicio1 = Servicios.new(1, "Público", [["General", 100], ["Pediatria", 50]])
+    @servicio1 = Servicio.new(1, "Público", [["General", 100], ["Pediatria", 50]])
   end
 
   it "Inicialización del objeto" do
-    expect(@servicio1).to be_instance_of(Servicios)
+    expect(@servicio1).to be_instance_of(Servicio)
   end
 
   it "Prueba para el identificador" do
@@ -21,6 +21,7 @@ describe Servicios do
 
   it "Prueba para las especialidades" do
     expect(@servicio1.especialidades).to be_instance_of(Array)
+    expect(@servicio1.especialidades[0]).to be_instance_of(Array)
     expect(@servicio1.especialidades[0]).to eq(["General", 100])
   end
 

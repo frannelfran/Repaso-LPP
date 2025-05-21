@@ -4,7 +4,8 @@
 #              (las especialidades pueden ser: general, pediatria y geriatria)
 
 
-class Servicios
+class Servicio
+  include Comparable
   attr_reader :id, :tipo, :especialidades
 
   def initialize(id, tipo, especialidades = [])
@@ -26,4 +27,18 @@ class Servicios
   def to_s
     "El servicio con id #{@id} de tipo #{@tipo} tiene las siguientes especialidades: #{@especialidades}"
   end
+
+  def <=>(other)
+    @especialidades.size <=> other.especialidades.size
+  end
+end
+
+def mayorNumeroEspecialidades(servicios)
+  servicios.max
+end
+
+def menorPrecio(servicios, especialidad)
+  precio_especialidades = servicios.map { |servicio| servicio.especialidades.find { |esp| esp[0] == especialidad } }
+  precios = precio_especialidades.map { |esp| esp[1] }
+  precios.min
 end
