@@ -25,8 +25,14 @@ class TestSostenible < Test::Unit::TestCase
   def test_animales
     assert_instance_of(Array, @sostenible.animales)
     assert_instance_of(Array, @sostenible.animales[0])
+    # Para los animales
+    assert_instance_of(String, @sostenible.animales[0][0])
     assert_equal("vaca", @sostenible.animales[0][0])
+    # Para el tipo de animal
+    assert_instance_of(String, @sostenible.animales[0][1])
     assert_equal("Mamífero", @sostenible.animales[0][1])
+    # Para el precio
+    assert_instance_of(Integer, @sostenible.animales[0][2])
     assert_equal(200, @sostenible.animales[0][2])
   end
 
