@@ -17,4 +17,9 @@ class TestServicios < Test::Unit::TestCase
     assert_instance_of(Integer, menorPrecio(@servicios, "General"))
     assert_equal(50, menorPrecio(@servicios, "General"))
   end
+
+  def test_menor_precio_especialidad
+    assert_instance_of(Servicio, menorPrecioEspecialidad(@servicios, "General"))
+    assert_equal(@servicio1, menorPrecioEspecialidad(@servicios, "General"))
+  end
 end

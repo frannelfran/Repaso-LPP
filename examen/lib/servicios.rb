@@ -38,7 +38,10 @@ def mayorNumeroEspecialidades(servicios)
 end
 
 def menorPrecio(servicios, especialidad)
-  precio_especialidades = servicios.map { |servicio| servicio.especialidades.find { |esp| esp[0] == especialidad } }
-  precios = precio_especialidades.map { |esp| esp[1] }
+  precios = servicios.map { |servicio| servicio.especialidades.find { |esp| esp[0] == especialidad }[1] }
   precios.min
+end
+
+def menorPrecioEspecialidad(servicios, especialidad)
+  servicios.min_by { |s| s.especialidades.find { |esp| esp[0] == especialidad}[1]}
 end
