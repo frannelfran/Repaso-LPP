@@ -3,6 +3,7 @@
 # (Nombre del estudiante, nota). REalizar mediante TDD la clase para representar una escuela.
 
 class Escuela
+  include Enumerable
   attr_reader :id, :tipo, :estudiantes
   def initialize(id, tipo, estudiantes)
     @id = id
@@ -13,4 +14,12 @@ class Escuela
     end
     @estudiantes = estudiantes
   end
+
+  def to_s
+    "La escuela con id #{@id} es de tipo #{@tipo} y tiene los siguientes estudiantes: #{@estudiantes}"
+  end
+  # para que sea enumerable
+  #ef each
+  # [@id, @tipo, @estudiantes].each { |value| yield value }
+  #end
 end

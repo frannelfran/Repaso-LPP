@@ -37,4 +37,10 @@ describe Escuela do
     expect(escuela.estudiantes[0][:nombre]).to eq("Juan")
     expect(escuela.estudiantes[0][:nota]).to eq(1.2)
   end
+
+  it "Pruebas para el método to_s" do
+    escuela = Escuela.new(1, "Privado", [{:nombre => "Juan", :nota => 1.2}])
+    expect(escuela.to_s()).to be_instance_of(String)
+    expect(escuela.to_s()).to eq("La escuela con id 1 es de tipo Privado y tiene los siguientes estudiantes: [{:nombre=>\"Juan\", :nota=>1.2}]")
+  end
 end
