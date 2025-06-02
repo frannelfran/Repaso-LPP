@@ -46,3 +46,21 @@ def contarMedias(escuelas)
   numNotas = sumas.count
   total / numNotas
 end
+
+# Para cada tupo de escuela calcular la media de las notas de los estudiantes
+
+def mediaNotasPublico(escuelas)
+  mutex = Mutex.new
+
+  hijo1 = Thread.new do
+    notas = escuelas.flat_map { |e| e.estudiante.flat_map { |t| t[:nota]}}
+    numEstudiantes = notas.count
+    # sumatorio = notas.sum
+    mutex.syncronize do
+      sumatorio = notas.sum
+    end
+    sumatorio/notas
+  end
+
+  hijo1.join
+end
