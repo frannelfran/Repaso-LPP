@@ -22,4 +22,9 @@ class TestServicios < Test::Unit::TestCase
     assert_instance_of(Servicio, menorPrecioEspecialidad(@servicios, "General"))
     assert_equal(@servicio1, menorPrecioEspecialidad(@servicios, "General"))
   end
+
+  def test_mayor_especialidades_tipo
+    assert_instance_of(Servicio, mayorEspecialidadTipo(@servicios, "Público"))
+    assert_equal(@servicio1, mayorEspecialidadTipo(@servicios, "Público"))
+  end
 end
