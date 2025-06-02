@@ -21,7 +21,20 @@ describe Escuela do
     expect(Escuela.new(1, "Privado", [{:nombre => "Juan", :nota => 5}])).not_to eq(nil)
   end
 
-  it "Pruebas para los getters"
-  escuela = Escuela.new(1, "Privado", [{:nombre => "Juan", :nota => 1.2}, {:nombre = "Jose", :nota => 10}])
-  # Para 
+  it "Pruebas para los getters" do
+    escuela = Escuela.new(1, "Privado", [{:nombre => "Juan", :nota => 1.2}, {:nombre => "Jose", :nota => 10}])
+    # Para el identificador
+    expect(escuela.id).to be_instance_of(Integer)
+    expect(escuela.id).to eq(1)
+
+    # Para el tipo de institución
+    expect(escuela.tipo).to be_instance_of(String)
+    expect(escuela.tipo).to eq("Privado")
+
+    # Para los estudiantes
+    expect(escuela.estudiantes[0][:nombre]).to be_instance_of(String)
+    expect(escuela.estudiantes[0][:nota]).to be_instance_of(Float)
+    expect(escuela.estudiantes[0][:nombre]).to eq("Juan")
+    expect(escuela.estudiantes[0][:nota]).to eq(1.2)
+  end
 end

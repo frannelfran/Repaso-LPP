@@ -3,6 +3,7 @@
 # (Nombre del estudiante, nota). REalizar mediante TDD la clase para representar una escuela.
 
 class Escuela
+  attr_reader :id, :tipo, :estudiantes
   def initialize(id, tipo, estudiantes)
     @id = id
     if (tipo == "Publico" || tipo == "Privado")
