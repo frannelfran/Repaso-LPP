@@ -52,3 +52,25 @@ def mayorEspecialidadTipo(servicios, tipo)
     .select { |s| s.tipo == tipo }
     .max
 end
+
+servicio1 = Servicio.new(1, "Público", [["General", 50], ["Pediatria", 100]])
+servicio2 = Servicio.new(2, "Privado", [["General", 180]])
+servicios = [servicio1, servicio2]
+
+# Hilo 1: Calcular el porcentaje de una especialidad en un conjunto de servicios
+hilo1 = Thread.new do
+  numeroDeEspecialidad = servicios.count { |s| s.especialidades.count { |e| e[1] == "Pediatria"}}
+  total = servicios.sum { |s| s.especialidades.size }
+  puts (numeroDeEspecialidad / total)
+end
+
+# Hilo 2: Calcular el precio medio de una consulta entre un conjunto de servicios
+hilo2 = Thread.new do
+  precio_medio = servicios.sum { |s| s.especialidades.sum { |e| e[1]}}
+  total_servicios = servicios.sum { |s| s.especialidades.size }
+
+  puts (precio_medio / total_servicios)
+end
+
+hilo1.join
+hilo2.join
