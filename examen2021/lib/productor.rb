@@ -84,6 +84,82 @@ end
 
 # Devolver el cultivo con mayor superficie según la temporada
 def mayorSuperficieCultivo(cooperativa, temporada)
-  cultivos = cooperativa.flat_map { |p| p.cultivos.find { |c| c[:temporada] == temporada}}
-  mayor = cultivos.max { |c| c[:superficie]}[:nombre]
+  cultivos = cooperativa.flat_map { |p| p.cultivos.select { |c| c[:temporada] == temporada } }
+  cultivos.max_by { |c| c[:superficie] }[:nombre] if !cultivos.empty?
 end
+
+# #############################################################################################
+####################################### Pregunta 5 ##########################################
+# En un mercadillo, un agricultor cosecha un producto y lo pone en un expositor. Un
+# empleado recoge el producto del expositor y lo lleva al mostrador del cliente. Escriba el
+# código Ruby que permita a dos hilos poner y retirar productos del expositor Describa su
+# implementación.
+#############################################################################################
+
+mutex = Mutex.new
+
+@expositor = []
+@mostrador = []
+
+empleado = ConditionVariable.new
+cliente = ConditionVariable.new
+
+def ponerExpositor (prod)
+	puts("Pone " + prod + " en " + "Expositor")
+	@expositor << prod
+end
+
+def quitarExpositor (prod) 
+	puts("Quita " + prod + " de " + "Expositor")
+	@expositor.delete(prod)
+end
+
+def ponerMostrador (prod)
+	puts("Pone " + prod + " en " + "Mostrador")
+	@mostrador << prod
+end
+
+def quitarMostrador (prod) 
+	puts("Quita " + prod + " de " + "Mostrador")
+	@mostrador.delete(prod)
+end
+
+
+# Creamos hilos pero no iniciamos la sincronización todavía
+threadEmpleado = Thread.new do
+  mutex.synchronize do
+    puts "Empleado: Esperando producto en el expositor"
+    empleado.wait(mutex) # Espera a que el agricultor ponga el producto
+    puts "Empleado: Recogiendo producto del expositor"
+    quitarExpositor("semilla")
+    ponerMostrador("semilla")
+    puts "Empleado: Producto puesto en el mostrador"
+    cliente.signal # Avisa al cliente
+  end
+end
+
+threadCliente = Thread.new do
+  mutex.synchronize do
+    puts "Cliente: Esperando producto en el mostrador"
+    cliente.wait(mutex) # Espera a que el empleado ponga el producto
+    puts "Cliente: Recogiendo producto del mostrador"
+    quitarMostrador("semilla")
+    puts "Cliente: Producto recogido"
+  end
+end
+
+# El agricultor inicia la secuencia después de que los otros hilos estén esperando
+threadAgricultor = Thread.new do
+  sleep(0.1) # Pequeña pausa para asegurar que los otros hilos estén esperando
+  mutex.synchronize do
+    puts "Agricultor: Poniendo producto en el expositor"
+    ponerExpositor("semilla")
+    puts "Agricultor: Avisando al empleado"
+    empleado.signal # Avisa al empleado
+  end
+end
+
+# Espera a que todos los hilos terminen
+threadAgricultor.join
+threadEmpleado.join
+threadCliente.join
