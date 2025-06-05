@@ -82,10 +82,10 @@ def mayorSuperficie(cooperativa, temporada)
   cooperativa.max_by { |p| sumarSuperficie(p.cultivos, temporada)}
 end
 
-# Devolver el cultivo con mayor superficie según la temporada
+# Devolver el nombre del cultivo con mayor superficie según la temporada
 def mayorSuperficieCultivo(cooperativa, temporada)
   cultivos = cooperativa.flat_map { |p| p.cultivos.select { |c| c[:temporada] == temporada } }
-  cultivos.max_by { |c| c[:superficie] }[:nombre] if !cultivos.empty?
+  cultivos.max_by { |c| c[:superficie] }[:nombre]
 end
 
 # #############################################################################################

@@ -35,6 +35,6 @@ class TestProductor < Test::Unit::TestCase
 
   def test_nombreMayorSuperficie
     assert_instance_of(String, mayorSuperficieCultivo(@cooperativa, "Otoño"))
-    assert_equal("Avena", mayorSuperficieCultivo(@cooperativa, "Otoño"))
+    assert_equal("Trigo", mayorSuperficieCultivo(@cooperativa, "Otoño"))
   end
 end
