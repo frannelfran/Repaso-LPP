@@ -124,6 +124,16 @@ def quitarMostrador (prod)
 	@mostrador.delete(prod)
 end
 
+# El agricultor inicia la secuencia después de que los otros hilos estén esperando
+threadAgricultor = Thread.new do
+  sleep(0.1) # Pequeña pausa para asegurar que los otros hilos estén esperando
+  mutex.synchronize do
+    puts "Agricultor: Poniendo producto en el expositor"
+    ponerExpositor("semilla")
+    puts "Agricultor: Avisando al empleado"
+    empleado.signal # Avisa al empleado
+  end
+end
 
 # Creamos hilos pero no iniciamos la sincronización todavía
 threadEmpleado = Thread.new do
@@ -148,16 +158,6 @@ threadCliente = Thread.new do
   end
 end
 
-# El agricultor inicia la secuencia después de que los otros hilos estén esperando
-threadAgricultor = Thread.new do
-  sleep(0.1) # Pequeña pausa para asegurar que los otros hilos estén esperando
-  mutex.synchronize do
-    puts "Agricultor: Poniendo producto en el expositor"
-    ponerExpositor("semilla")
-    puts "Agricultor: Avisando al empleado"
-    empleado.signal # Avisa al empleado
-  end
-end
 
 # Espera a que todos los hilos terminen
 threadAgricultor.join
