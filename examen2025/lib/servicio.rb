@@ -48,7 +48,7 @@ def menorPrecioEspecialidad(servicios, tipo)
 end
 
 def menorPrecio(especialidades, tipo)
-  precioMinimo = 999
+  precioMinimo = Float::INFINITY
   for i in 0...especialidades.size
     if especialidades[i][:tipo] == tipo && especialidades[i][:precio] < precioMinimo
       precioMinimo = especialidades[i][:precio]
@@ -56,3 +56,25 @@ def menorPrecio(especialidades, tipo)
   end
   precioMinimo
 end
+
+# Ejercicio 3: Programacion concurrente con hilos
+servicio1 = Servicio.new(1, "publico", [{:tipo => "general", :precio => 12.5}])
+servicio2 = Servicio.new(2, "publico", [{:tipo => "general", :precio => 2.5}, {:tipo => "geriatria", :precio => 4.1}])
+@servicios = [servicio1, servicio2]
+
+# Hilo 1: Calcular el porcentaje de una especialidad en un conjunto de servicios
+hilo1 = Thread.new do
+  numEspecialidad = @servicios.sum { |s| s.especialidades.count { |e| e[:tipo] == "general"}}
+  totalEspecialidades = @servicios.sum { |s| s.especialidades.size }
+  puts numEspecialidad / totalEspecialidades
+end
+
+# Hilo 2: Calcular el precio medio de una consulta entre un conjunto de servicios
+hilo2 = Thread.new do
+  totalPrecio = @servicios.sum { |s| s.especialidades.sum { |e| e[:precio]}}
+  numConsultas = @servicios.sum { |s| s.especialidades.size }
+  puts totalPrecio / numConsultas
+end
+
+hilo1.join
+hilo2.join
