@@ -60,3 +60,34 @@ def obtenerReceta(recetario, nombre)
   recetas = recetario.select { |r| r.ingredientes.select { |i| i[:nombre] == nombre}}
   recetas.max_by { |r| calcularMayorCantidad(r.ingredientes, nombre)}
 end
+
+# En una cocina, un chef debe de llevar un alimento a la olla pero primero debe recogerlo en una mesa.
+# Ralizar con hilos esta situación
+
+mutex = Mutex.new
+CV = ConditionVariable.new
+
+def recogerIngrediente(ingrediente)
+  puts "El chef recogio el #{ingrediente}" 
+end
+
+def dejarEnOlla(ingrediente)
+  puts "El chef dejo el #{ingrediente} en la olla"
+end
+
+hilo1 = Thread.new do
+  mutex.synchronize do
+    recogerIngrediente("arroz")
+    CV.signal
+  end
+end
+
+hilo2 = Thread.new do
+  mutex.synchronize do
+    CV.wait(mutex)
+    dejarEnOlla("arroz")
+  end
+end
+
+hilo1.join
+hilo2.join
