@@ -49,3 +49,36 @@ def minConsultas(cooperativa, tipo)
   pacientes = consultas.flat_map { |c| c.pacientes }
   pacientes.min_by { |p| p[:consultas]}[:id]
 end
+
+# Un administrador ddebe depositar en una bandeja el expediente de una persona, una
+# enfermera retira el expediente de la bandeja y lo lleva a la consulta del médico.
+# Realizar 2 hilos para poner y retirar el expediente de la bandeja.
+
+mutex = Mutex.new
+CV = ConditionVariable.new
+
+def ponerBandeja(expediente)
+  puts "El expediente #{expediente} se ha colocado en la bandeja"
+end
+
+def quitarBandeja(expediente)
+  puts "El expediente #{expediente} se ha retirado de la bandeja"
+end
+
+hiloAdministrador = Thread.new do
+  sleep(0.1)
+  mutex.synchronize do
+    ponerBandeja(2222)
+    CV.signal
+  end
+end
+
+hiloEnfermera = Thread.new do
+  mutex.synchronize do
+    CV.wait(mutex)
+    quitarBandeja(2222)
+  end
+end
+
+hiloAdministrador.join
+hiloEnfermera.join
